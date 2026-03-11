@@ -26,13 +26,14 @@ export default function AccessRequests() {
         ) ?? []
       : empreendimentos ?? [];
 
-  const { data: requests } = useQuery({
+  const { data: requestsData } = useQuery({
     queryKey: ['access-requests', empreendimentoId],
     queryFn: () =>
       getAccessRequests({
         empreendimentoId: empreendimentoId || undefined,
       }),
   });
+  const requests = Array.isArray(requestsData) ? requestsData : [];
 
   const approveMutation = useMutation({
     mutationFn: approveAccessRequest,
@@ -91,7 +92,7 @@ export default function AccessRequests() {
             </tr>
           </thead>
           <tbody>
-            {requests?.map((r) => (
+            {requests.map((r) => (
               <tr key={r.id}>
                 <td>{new Date(r.date).toLocaleDateString()}</td>
                 <td>{r.visitorName}</td>
