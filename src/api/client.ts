@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+const raw = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '/api' : 'http://localhost:3000');
+// Ensure absolute URLs have a protocol (missing protocol = treated as relative path = URL duplication)
 const baseURL =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? '/api' : import.meta.env.VITE_API_URL || 'http://localhost:3000');
+  raw.startsWith('/') || raw.startsWith('http://') || raw.startsWith('https://')
+    ? raw
+    : `https://${raw}`;
 
 export const api = axios.create({
   baseURL,
