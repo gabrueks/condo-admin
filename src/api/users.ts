@@ -17,8 +17,8 @@ export async function listUsers(params?: {
   role?: string;
   search?: string;
 }): Promise<UserListItem[]> {
-  const { data } = await api.get<UserListItem[]>('/users', { params });
-  return data;
+  const { data } = await api.get<{ items: UserListItem[]; total: number } | UserListItem[]>('/users', { params });
+  return Array.isArray(data) ? data : (data?.items ?? []);
 }
 
 export async function getUser(
