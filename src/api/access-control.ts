@@ -17,10 +17,10 @@ export interface AccessRequest {
 export async function getAccessRequests(params?: {
   empreendimentoId?: string;
 }): Promise<AccessRequest[]> {
-  const { data } = await api.get<AccessRequest[]>('/access-requests', {
+  const { data } = await api.get<{ items: AccessRequest[]; total: number } | AccessRequest[]>('/access-requests', {
     params,
   });
-  return data;
+  return Array.isArray(data) ? data : (data?.items ?? []);
 }
 
 export async function approveAccessRequest(id: string): Promise<AccessRequest> {

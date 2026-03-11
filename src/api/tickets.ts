@@ -20,8 +20,8 @@ export async function getTickets(params?: {
   status?: string;
   category?: string;
 }): Promise<Ticket[]> {
-  const { data } = await api.get<Ticket[]>('/tickets', { params });
-  return data;
+  const { data } = await api.get<{ items: Ticket[]; total: number } | Ticket[]>('/tickets', { params });
+  return Array.isArray(data) ? data : (data?.items ?? []);
 }
 
 export async function getTicket(id: string): Promise<Ticket> {
